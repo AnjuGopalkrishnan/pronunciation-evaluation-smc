@@ -1,0 +1,11 @@
+* First go through existing source code and preprocessing steps in anju's branch
+* Put the code from lalitha's drive into this and analyse it
+    - she mentioned that all of the datafiles were already preprocessed have to check that
+* Look at hugging face to see what is there in terms of hubert + artic + speech brain
+* get started on any specific data cleaning which is needed
+* get started on fine tuning the hubert model on the artic dataset
+* look at the lip animation thing
+* think about the code structure and how things should be like
+* Define a function which can take in a sentence as input and predicted sentence and tell the phonemes which need to be replaced
+
+
