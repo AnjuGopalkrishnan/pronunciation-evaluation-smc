@@ -1,12 +1,13 @@
 TODOS:
 
 * read through the artic dataset readme
-* remove anju's code
+- https://psi.engr.tamu.edu/l2-arctic-corpus-docs/
 * put lalitha's code in a better manner in a separate files
 * look into how to do evaluation
 * First go through existing source code and preprocessing steps in anju's branch
-* Put the code from lalitha's drive into this and analyse it -> https://drive.google.com/drive/u/0/folders/1gBfiHr9J96ZIOuh8JvGGwO-6oyt4W2vn
-    - she mentioned that all of the datafiles were already preprocessed have to check that
+* Put the code from lalitha's drive into this and analyse it
+- https://drive.google.com/drive/u/0/folders/1gBfiHr9J96ZIOuh8JvGGwO-6oyt4W2vn
+- she mentioned that all of the datafiles were already preprocessed have to check that
 * Look at hugging face to see what is there in terms of whisper + speech brain
 * get started on fine tune on whisper in colab pro
 * look at the lip animation thing
