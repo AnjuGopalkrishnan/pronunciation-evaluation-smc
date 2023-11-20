@@ -12,7 +12,7 @@ TODOS:
 * get started on fine tune on whisper in colab pro
 * look at the lip animation thing
 * Define a function which can take in a sentence as input and predicted sentence and tell the phonemes which need to be replaced
-
+*hugging space ?
 
 NOTES:
 
