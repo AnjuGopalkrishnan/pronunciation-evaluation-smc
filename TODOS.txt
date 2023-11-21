@@ -14,6 +14,9 @@ TODOS:
 * Define a function which can take in a sentence as input and predicted sentence and tell the phonemes which need to be replaced
 *hugging space ?
 
+* can try hubert also it seems like because in the hugging face model the only thing different is the source of the model
+
+
 NOTES:
 
 schedulers not added
