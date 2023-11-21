@@ -18,7 +18,7 @@ valid_annotation: !ref <data_folder_save>/val_data.csv
 test_annotation: !ref <data_folder_save>/test_data.csv
 
 # Training parameters
-number_of_epochs: 35
+number_of_epochs: 100
 batch_size: 16
 lr: 0.0003
 lr_wav2vec: 0.00001
