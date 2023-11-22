@@ -1,0 +1,31 @@
+TODOS:
+
+* read through the artic dataset readme
+- https://psi.engr.tamu.edu/l2-arctic-corpus-docs/
+* put lalitha's code in a better manner in a separate files
+* look into how to do evaluation
+* First go through existing source code and preprocessing steps in anju's branch
+* Put the code from lalitha's drive into this and analyse it
+- https://drive.google.com/drive/u/0/folders/1gBfiHr9J96ZIOuh8JvGGwO-6oyt4W2vn
+- she mentioned that all of the datafiles were already preprocessed have to check that
+* Look at hugging face to see what is there in terms of whisper + speech brain
+* get started on fine tune on whisper in colab pro
+* look at the lip animation thing
+* Define a function which can take in a sentence as input and predicted sentence and tell the phonemes which need to be replaced
+*hugging space ?
+
+* can try hubert also it seems like because in the hugging face model the only thing different is the source of the model
+
+
+NOTES:
+
+schedulers not added
+
+read the artic source
+
+arpa_phonemes: custom mapping file from the artic official readme
+
+prepare_data.ipynb is related to creating the processed dataset
+train_val_test_split.ipynb is related to splitting the dataset
+transcribe => all the metrics stuff
+evaluate => on the test data and predict
