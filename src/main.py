@@ -19,6 +19,11 @@ from lib import jwt
 
 app = FastAPI()
 
+# Singletons
+
+# app.state.wave2vec2_asr_brain = singleton_instance
+# app.state.hubert_asr_brain = singleton_instance
+
 # Set up CORS
 origins = ["*"]  # Update this with your allowed origins
 
