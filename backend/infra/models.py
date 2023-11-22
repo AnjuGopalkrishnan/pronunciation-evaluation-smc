@@ -7,6 +7,10 @@ class User(BaseModel):
     username: str
     email: str
 
+class LoginUser(BaseModel):
+    password: str
+    email: str
+
 class Words(BaseModel):
     word: str
 

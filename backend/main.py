@@ -5,6 +5,7 @@ import pronouncing
 
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -17,6 +18,17 @@ from infra.db import User
 from lib import jwt
 
 app = FastAPI()
+
+# Set up CORS
+origins = ["*"]  # Update this with your allowed origins
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Or specify the HTTP methods you allow
+    allow_headers=["*"],  # Or specify the HTTP headers you allow
+)
 
 # fetch words of the week from database
 @app.get("/words")
@@ -59,7 +71,7 @@ def register(user: models.User, db: Session = Depends(infra.db.get_db)):
         }
 
 @app.post("/auth/login")
-def login(user: models.User):
+def login(user: models.LoginUser):
     values = {
         'email': user.email,
     }
@@ -81,7 +93,7 @@ def login(user: models.User):
         )
     #    print("user is ", user)
     access_token = jwt.create_access_token(payload={"email": user.email})
-    return {"access_token": access_token}
+    return {"username": row[1], "access_token": access_token}
 
 @app.get("/user/progress/{username}")
 def get_user_progress(username: str, db: Session = Depends(infra.db.get_db)):
