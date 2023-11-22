@@ -6,7 +6,6 @@ from speechbrain.utils.metric_stats import ErrorRateStats
 import speechbrain as sb
 import torch
 import sys
-from src.ml.util.mpd_eval_v3 import MpdStats
 from hyperpyyaml import load_hyperpyyaml
 import os
 
@@ -174,8 +173,8 @@ def get_label_encoder(hparams):
     return label_encoder
 
 
-if __name__ == '__main__':
-    hparams_file = './config/wave2vec2/hparams/inference.yaml'
+def get_wav2vec2_asr_sb_object(hparams_file):
+    print(f"Loading hparams from yaml file located at {hparams_file}")
 
     hparams = None
     # Load hyperparameters file with command-line overrides
@@ -189,6 +188,26 @@ if __name__ == '__main__':
         modules=hparams["modules"],
         hparams=hparams,
         checkpointer=hparams["checkpointer"],
-        # run_opts={"device": "cuda"}
+        run_opts={"device": "cuda" if torch.cuda.is_available() else "cpu"}
     )
     asr_brain.label_encoder = label_encoder
+    print("Wave2Vec2 model object is created with label encoder")
+    return asr_brain
+
+# Uncomment for testing locally
+if __name__ == '__main__':
+    wave2vec2_asr_brain = get_wav2vec2_asr_sb_object('./ml/config/wave2vec2/hparams/inference.yaml')
+    test_audio_path = "./assets/arctic_a0100.wav"
+    canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
+    predicted_phonemes, score, stats = wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
+    print("Done local testing")
+
+    '''
+    getting run time error:
+    
+    RuntimeError: Error(s) in loading state_dict for HuggingFaceWav2Vec2:
+	Missing key(s) in state_dict: "model.encoder.pos_conv_embed.conv.weight_g", "model.encoder.pos_conv_embed.conv.weight_v". 
+	Unexpected key(s) in state_dict: "model.encoder.pos_conv_embed.conv.parametrizations.weight.original0", "model.encoder.pos_conv_embed.conv.parametrizations.weight.original1". 
+
+    
+    '''

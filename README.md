@@ -14,7 +14,7 @@ It has three components to it:
 
 TODO. talk about how to train the model
 
-NOTE: put the results inside ml folder but only download the checkpoint and not the other file
+NOTE: put the results inside src folder but only download the checkpoint and not the other wav2vec checkpoint as that will automatically get downloaded
 
 ### Frontend Setup
 

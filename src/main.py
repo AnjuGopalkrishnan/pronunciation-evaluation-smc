@@ -11,6 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy_utils import database_exists, create_database, drop_database
 
+from wav2vec2_inference import get_wav2vec2_asr_sb_object
 import infra.db
 import lib.authenticate
 from infra import models
@@ -20,9 +21,10 @@ from lib import jwt
 app = FastAPI()
 
 # Singletons
-
-# app.state.wave2vec2_asr_brain = singleton_instance
+print(f"Setting app wave2vec2 asr speech brain object globally")
+app.state.wave2vec2_asr_brain = get_wav2vec2_asr_sb_object('./ml/config/wave2vec2/hparams/inference.yaml')
 # app.state.hubert_asr_brain = singleton_instance
+print(f"Created wave2vec2 model singleton!")
 
 # Set up CORS
 origins = ["*"]  # Update this with your allowed origins
@@ -131,18 +133,14 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
             "success": False
         }
 
-#TODO. get this working first
-@app.get("/test/wav2vec")
+# This is test code to see if wav2vec2 actually works
+@app.get("/test/wav2vec2")
 def test_wave2vec():
+    test_audio_path = "./assets/arctic_a0100.wav"
+    canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
+    predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
     return {
-        "info": "yet to implement"
+        "predicted_phonemes": predicted_phonemes,
+        "score": score,
+        "stats": stats
     }
-    # test_audio_path = "/content/arctic_a0001.wav"
-    # canonical_phonemes = "sil f a m ah s t s l iy p sil hh iy er jh d sil sil"
-    #
-    # # predicted_phonemes, score, stats = expose_asr_evaluation(test_audio_path, canonical_phonemes)
-    #
-    # # Print or use the results as needed
-    # print(f'Predicted Phonemes: {predicted_phonemes}')
-    # print(f'Score: {score}')
-    # print(f'Stats: {stats}')
