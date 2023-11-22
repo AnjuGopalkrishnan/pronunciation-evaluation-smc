@@ -107,13 +107,13 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
     progress = db.query(infra.db.Userprogress).filter(infra.db.Userprogress.username == user_progress.username).filter(infra.db.Userprogress.word == user_progress.word).first()
     if not progress:
         raise HTTPException(status_code=404, detail="User profile not found")
-    match action:
-        case "done":
-            progress.done = user_progress.done
-        case "favorite":
-            progress.favorite = user_progress.favorite
-        case "score":
-            progress.score = user_progress.score
+
+    if action == "done":
+        progress.done = user_progress.done
+    elif action == "favorite":
+        progress.favorite = user_progress.favorite
+    elif action == "score":
+        progress.score = user_progress.score
         
     try:
         db.commit()
@@ -125,3 +125,19 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
         return {
             "success": False
         }
+
+#TODO. get this working first
+@app.get("/test/wav2vec")
+def test_wave2vec():
+    return {
+        "info": "yet to implement"
+    }
+    # test_audio_path = "/content/arctic_a0001.wav"
+    # canonical_phonemes = "sil f a m ah s t s l iy p sil hh iy er jh d sil sil"
+    #
+    # # predicted_phonemes, score, stats = expose_asr_evaluation(test_audio_path, canonical_phonemes)
+    #
+    # # Print or use the results as needed
+    # print(f'Predicted Phonemes: {predicted_phonemes}')
+    # print(f'Score: {score}')
+    # print(f'Stats: {stats}')
