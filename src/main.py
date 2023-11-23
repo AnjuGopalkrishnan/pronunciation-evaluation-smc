@@ -3,7 +3,7 @@ from datetime import datetime
 import re
 import pronouncing
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, File, Form, HTTPException, Depends, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
@@ -17,6 +17,7 @@ import lib.authenticate
 from infra import models
 from infra.db import User
 from lib import jwt
+from pydub import AudioSegment
 
 app = FastAPI()
 
@@ -54,7 +55,7 @@ def get_phonemes(text: str):
         pronunciation_list = pronouncing.phones_for_word(word)[0] # choose the first version of the phoneme
         WordToPhn.append(pronunciation_list)
 
-    SentencePhn=' sil '.join(WordToPhn) 
+    SentencePhn=' '.join(WordToPhn)
     Output = re.sub(r'\d+', '', SentencePhn) #Remove the digits in phonemes
     return Output.lower()
 
@@ -133,12 +134,31 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
             "success": False
         }
 
-# This is test code to see if wav2vec2 actually works
-@app.get("/test/wav2vec2")
-def test_wave2vec():
-    test_audio_path = "./assets/arctic_a0100.wav"
-    canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
-    predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
+@app.post("/predict/pronunciation")
+def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None)):
+    print("Text: " + text)
+    print("Audio file: " + audio.filename)
+    # save the audio file to downloads folder after removing the existing file
+    try:
+        os.remove("./assets/"+audio.filename)
+    except:
+        pass
+    with open("./assets/"+audio.filename, "xb") as buffer:
+        buffer.write(audio.file.read())
+
+    audio_path = "./assets/"+audio.filename
+
+    # convert webm to wav
+    wav = AudioSegment.from_file(audio_path)
+    getaudio = wav.export("./assets/speech.wav", format="wav")
+    audio_path = "./assets/speech.wav"
+
+    # fetch ground truth for the speech
+    canonical_phonemes = get_phonemes(text)
+
+    # evaluate pronunciation score from ML model
+    predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(audio_path, canonical_phonemes)
+    
     return {
         "predicted_phonemes": predicted_phonemes,
         "score": score,

@@ -27,3 +27,4 @@ bcrypt
 sqlalchemy-utils
 python-multipart
 pronouncing
+pydub
