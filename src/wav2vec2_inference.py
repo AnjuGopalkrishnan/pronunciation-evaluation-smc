@@ -75,15 +75,24 @@ class ASR(sb.Brain):
         with torch.no_grad():
           print("Making predictions from the best model")
           preds, seq = self.compute_forward_evaluate(batch, stage=sb.Stage.TEST)
-          print("Got the predictions")
-        return preds, seq
+          print(f"Got the predictions which is {preds}")
+        return preds[0], seq
 
     def evaluate_test_audio(self, test_audio_path, canonical_phonemes):
         predicted_phonemes, predicted_sequence = self.get_predicted_phonemes_for_test_audio(test_audio_path)
+        predicted_phonemes = predicted_phonemes.split()
+        predicted_sequence_without_sil = [[]]
+
+        # Ensure that we remove the sils
+        for pred_phoneme, pred_seq in zip(predicted_phonemes, predicted_sequence[0]):
+            if pred_phoneme != "sil":
+                predicted_sequence_without_sil[0].append(pred_seq)
+
 
         print("Converting canonical to appropriate format for getting error")
         phn_list_canonical = canonical_phonemes.strip().split()
-        phn_encoded_list_canonical = [self.label_encoder.encode_sequence(phn_list_canonical)]
+        phn_list_canonical_without_sil = list(filter(lambda phn: phn != "sil", phn_list_canonical))
+        phn_encoded_list_canonical = [self.label_encoder.encode_sequence(phn_list_canonical_without_sil)]
         canonicals = torch.LongTensor(phn_encoded_list_canonical)
         canonical_lens = torch.ones((1,1))
 
@@ -91,7 +100,7 @@ class ASR(sb.Brain):
         error_metrics = ErrorRateStats()
         error_metrics.append(
                         ids=[test_audio_path],
-                        predict=predicted_sequence,
+                        predict=predicted_sequence_without_sil,
                         target=canonicals,
                         predict_len=None,
                         target_len=canonical_lens,

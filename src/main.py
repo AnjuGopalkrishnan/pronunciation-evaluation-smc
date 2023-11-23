@@ -164,3 +164,15 @@ def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None))
         "score": score,
         "stats": stats
     }
+
+# This is test code to see if wav2vec2 actually works
+@app.get("/test/wav2vec2")
+def test_wave2vec():
+    test_audio_path = "./assets/arctic_a0100.wav"
+    canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
+    predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
+    return {
+        "predicted_phonemes": predicted_phonemes,
+        "score": score,
+        "stats": stats
+    }
