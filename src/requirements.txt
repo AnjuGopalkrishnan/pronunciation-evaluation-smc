@@ -28,3 +28,4 @@ sqlalchemy-utils
 python-multipart
 pronouncing
 pydub
+librosa

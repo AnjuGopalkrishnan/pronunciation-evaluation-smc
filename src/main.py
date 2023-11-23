@@ -46,6 +46,12 @@ def get_weekly_words(skip: int = 0, limit: int = None, db: Session = Depends(inf
         words = words[:limit]
     return words
 
+# fetch favorites for user from database
+@app.get("/favorites/{username}")
+def get_favorites(username: str, db: Session = Depends(infra.db.get_db)):
+    favorites = db.query(infra.db.Userprogress).filter(infra.db.Userprogress.username == username).filter(infra.db.Userprogress.favorite == "true").all()
+    return favorites
+
 # get phonemes for any sentence
 @app.get("/phonemes/{text}")
 def get_phonemes(text: str):
@@ -114,7 +120,7 @@ def get_user_progress(username: str, db: Session = Depends(infra.db.get_db)):
 def update_user_progress(action:str, user_progress: models.Userprogress, db: Session = Depends(infra.db.get_db)):
     progress = db.query(infra.db.Userprogress).filter(infra.db.Userprogress.username == user_progress.username).filter(infra.db.Userprogress.word == user_progress.word).first()
     if not progress:
-        raise HTTPException(status_code=404, detail="User profile not found")
+        progress = infra.db.Userprogress(username=user_progress.username, word=user_progress.word, done="false", favorite="false", score="0")
 
     if action == "done":
         progress.done = user_progress.done
@@ -124,6 +130,7 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
         progress.score = user_progress.score
         
     try:
+        db.add(progress)
         db.commit()
         return {
             "success": True
@@ -147,11 +154,12 @@ def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None))
         buffer.write(audio.file.read())
 
     audio_path = "./assets/"+audio.filename
+    print("Audio path: " + audio_path)
 
     # convert webm to wav
-    wav = AudioSegment.from_file(audio_path)
-    getaudio = wav.export("./assets/speech.wav", format="wav")
-    audio_path = "./assets/speech.wav"
+    # wav = AudioSegment.from_file(audio_path)
+    # getaudio = wav.export("./assets/speech.wav", format="wav")
+    # audio_path = "./assets/speech.wav"
 
     # fetch ground truth for the speech
     canonical_phonemes = get_phonemes(text)
