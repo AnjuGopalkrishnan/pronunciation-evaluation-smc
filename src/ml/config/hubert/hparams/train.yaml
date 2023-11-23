@@ -8,7 +8,10 @@ save_folder: !ref <output_folder>/save
 train_log: !ref <output_folder>/train_log.txt
 
 # URL for the wav2vec2 model.
-wav2vec2_hub: "facebook/hubert-large-ls960-ft"  # wav2vec2-base, pre-trained only on LS 960h
+# wav2vec2_hub: "facebook/hubert-large-ls960-ft"  # wav2vec2-base, pre-trained only on LS 960h
+
+#URL for the hubert model
+wav2vec2_hub: "facebook/hubert-base-ls960"
 
 # Data files
 data_folder_save: "./data"
@@ -75,7 +78,7 @@ epoch_counter: !new:speechbrain.utils.epoch_loop.EpochCounter
 
 # 1024 for wav2vec2-large, 768 for wav2vec2-base
 enc: !new:speechbrain.lobes.models.VanillaNN.VanillaNN
-    input_shape: [null, null, 1024]
+    input_shape: [null, null, 768]
     activation: !ref <activation>
     dnn_blocks: !ref <dnn_layers>
     dnn_neurons: !ref <dnn_neurons>
