@@ -23,7 +23,6 @@ def make_attn_mask(wavs, wav_lens):
     return attn_mask
 
 
-#NOTE: This class is a lighter version , as it only has the relevant files needed for evaluation
 class ASR(sb.Brain):
     #Testing for one single audio file
     def compute_forward_evaluate(self, batch, stage):
@@ -153,6 +152,7 @@ class ASR(sb.Brain):
             elif op == "D":
                 errors["deletions"]["canonical"].append((i, canonical_phn))
                 errors["deletions"]["predicted"].append((i, predicted_phn))
+
         return errors
 
 
@@ -188,7 +188,7 @@ def get_wav2vec2_asr_sb_object(hparams_file):
         modules=hparams["modules"],
         hparams=hparams,
         checkpointer=hparams["checkpointer"],
-        run_opts={"device": "cuda" if torch.cuda.is_available() else "cpu"}
+        # run_opts={"device": "cuda" if torch.cuda.is_available() else "cpu"}
     )
     asr_brain.label_encoder = label_encoder
     print("Wave2Vec2 model object is created with label encoder")
@@ -201,13 +201,3 @@ if __name__ == '__main__':
     canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
     predicted_phonemes, score, stats = wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
     print("Done local testing")
-
-    '''
-    getting run time error:
-    
-    RuntimeError: Error(s) in loading state_dict for HuggingFaceWav2Vec2:
-	Missing key(s) in state_dict: "model.encoder.pos_conv_embed.conv.weight_g", "model.encoder.pos_conv_embed.conv.weight_v". 
-	Unexpected key(s) in state_dict: "model.encoder.pos_conv_embed.conv.parametrizations.weight.original0", "model.encoder.pos_conv_embed.conv.parametrizations.weight.original1". 
-
-    
-    '''
