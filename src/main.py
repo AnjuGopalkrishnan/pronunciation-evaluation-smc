@@ -11,6 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from sqlalchemy_utils import database_exists, create_database, drop_database
 
+from wav2vec2_inference import get_wav2vec2_asr_sb_object
 import infra.db
 import lib.authenticate
 from infra import models
@@ -18,6 +19,12 @@ from infra.db import User
 from lib import jwt
 
 app = FastAPI()
+
+# Singletons
+print(f"Setting app wave2vec2 asr speech brain object globally")
+app.state.wave2vec2_asr_brain = get_wav2vec2_asr_sb_object('./ml/config/wave2vec2/hparams/inference.yaml')
+# app.state.hubert_asr_brain = singleton_instance
+print(f"Created wave2vec2 model singleton!")
 
 # Set up CORS
 origins = ["*"]  # Update this with your allowed origins
@@ -107,13 +114,13 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
     progress = db.query(infra.db.Userprogress).filter(infra.db.Userprogress.username == user_progress.username).filter(infra.db.Userprogress.word == user_progress.word).first()
     if not progress:
         raise HTTPException(status_code=404, detail="User profile not found")
-    match action:
-        case "done":
-            progress.done = user_progress.done
-        case "favorite":
-            progress.favorite = user_progress.favorite
-        case "score":
-            progress.score = user_progress.score
+
+    if action == "done":
+        progress.done = user_progress.done
+    elif action == "favorite":
+        progress.favorite = user_progress.favorite
+    elif action == "score":
+        progress.score = user_progress.score
         
     try:
         db.commit()
@@ -125,3 +132,15 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
         return {
             "success": False
         }
+
+# This is test code to see if wav2vec2 actually works
+@app.get("/test/wav2vec2")
+def test_wave2vec():
+    test_audio_path = "./assets/arctic_a0100.wav"
+    canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
+    predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
+    return {
+        "predicted_phonemes": predicted_phonemes,
+        "score": score,
+        "stats": stats
+    }
