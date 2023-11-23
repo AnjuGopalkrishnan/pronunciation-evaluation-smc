@@ -135,7 +135,7 @@ def update_user_progress(action:str, user_progress: models.Userprogress, db: Ses
         }
 
 @app.post("/predict/pronunciation")
-def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None)):
+def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None), name: str = Form(None), db: Session = Depends(infra.db.get_db)):
     print("Text: " + text)
     print("Audio file: " + audio.filename)
     # save the audio file to downloads folder after removing the existing file
@@ -159,6 +159,15 @@ def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None))
     # evaluate pronunciation score from ML model
     predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(audio_path, canonical_phonemes)
     
+    # insert user progress into database
+    try:
+        progress = infra.db.Userprogress(username = name, word = text, done = "false", favorite = "false", score = score)
+        db.add(progress)
+        db.commit()
+        db.refresh(progress)
+    except:
+        pass
+    
     return {
         "predicted_phonemes": predicted_phonemes,
         "score": score,
@@ -169,7 +178,7 @@ def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None))
 @app.get("/test/wav2vec2")
 def test_wave2vec():
     test_audio_path = "./assets/arctic_a0100.wav"
-    canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
+    canonical_phonemes = "y uw m ah s t s l iy p hh iy er jh d"  # actual sentence is 'You must sleep he urged'
     predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
     return {
         "predicted_phonemes": predicted_phonemes,
