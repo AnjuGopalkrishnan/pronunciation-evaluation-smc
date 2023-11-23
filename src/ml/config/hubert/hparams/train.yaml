@@ -18,7 +18,7 @@ valid_annotation: !ref <data_folder_save>/val_data.csv
 test_annotation: !ref <data_folder_save>/test_data.csv
 
 # Training parameters
-number_of_epochs: 30
+number_of_epochs: 50
 batch_size: 6
 num_workers: 1
 lr: 0.0003
