@@ -16,8 +16,23 @@ import lib.authenticate
 from infra import models
 from infra.db import User
 from lib import jwt
-
+import sys
+sys.path.append('../')
+from ml import inference
 app = FastAPI()
+
+test_audio_path = "./arctic_a0100.wav"
+canonical_phonemes = "y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
+
+
+asr_brain = inference.initiate_asr()
+predicted_phonemes, score, stats = asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
+
+print("********")
+print(canonical_phonemes)
+print(predicted_phonemes)
+print(score)
+print(stats)
 
 # Set up CORS
 origins = ["*"]  # Update this with your allowed origins
