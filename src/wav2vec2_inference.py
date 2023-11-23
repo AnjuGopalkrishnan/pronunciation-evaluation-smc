@@ -125,7 +125,7 @@ class ASR(sb.Brain):
         # Reset sys.stdout
         sys.stdout = original_stdout
         print("Extracting stats from stdout")
-        return predicted_phonemes, score, self.extract_stats_from_wer_stats_string(stats_string)
+        return predicted_sequence_without_sil, score, self.extract_stats_from_wer_stats_string(stats_string)
 
     def extract_stats_from_wer_stats_string(self, stats_string):
         lines = stats_string.split('\n')
