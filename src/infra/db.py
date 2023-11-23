@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime, Foreign
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('postgresql://speechparrot_user:gredX4buAaqNMb76PtLs59oGhMMwZDky@dpg-clessbd3qkas73b08k1g-a.singapore-postgres.render.com/speechparrot', echo=True)
+engine = create_engine('POSTGRES_DB_STRING_TO_BE_REPLACED', echo=True)
 metadata = MetaData()
 connection = engine.connect()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
