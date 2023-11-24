@@ -36,6 +36,7 @@ Refer to <a href = "https://github.com/TheDorkKnightRises/smc-pronunciation-app"
 * Refer to the individual ipynb files which can be found under "./src/ml/train/X/X_train.ipynb" for training specific models in colab (out of Wav2Vec2, Hubert & Whisper we found Wav2Vec2 to be the best in terms of fast inference, performance and easy integration with the app)
 * In each of these ipynb files ensure that the appropriate train yaml file from "./src/ml/config/X/train.yaml" is uploaded in the correct drive path as mentioned in the ipynb when creating the dataloaders.
 * Once the models are trained the checkpoints will be populated in a folder called "results" which can then be downloaded locally and placed in your server (in the location as mentioned earlier) to ensure that the backend inference api can work seamlessly
+* For the purposes of our app we have used only the "wav2vec2-base_ctc" checkpoints
 
 ### Backend Setup
 
