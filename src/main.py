@@ -172,20 +172,19 @@ def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None),
     # evaluate pronunciation score from ML model
     predicted_phonemes, score, stats = app.state.wave2vec2_asr_brain.evaluate_test_audio(audio_path, canonical_phonemes)
     
-    sugg_words=[]
+    #sugg_words=[]
 
-    for i in stats.get("substitutions").get("canonical"):
-        search = "%{}%".format(i[1].upper())
-        row = db.query(infra.db.Phonemedictionary).filter(infra.db.Phonemedictionary.phoneme.like(search)).first()
+    #for k,v in stats.get("substitutions").get("canonical"):
+    #    search = "%{}%".format(v.upper())
+    #    row = db.query(infra.db.Phonemedictionary).filter(infra.db.Phonemedictionary.phoneme.like(search)).first()
 
-        if row is None:
-            pass
-        else:
-            #if(any(not c.isalnum() for c in row.word)):
-            sugg_words.append(row.word)
+    #    if row is None:
+    #        pass
+    #    else:
+    #        sugg_words.append(row.word)
 
-        if len(sugg_words) > 10:
-            break
+    #    if len(sugg_words) > 10:
+    #        break
 
     # insert user progress into database
     try:
