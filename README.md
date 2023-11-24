@@ -7,17 +7,17 @@ This repo contains the code for the Sound and music computing final project.
 This project is essentially a Mispronunciation detection system which can help L2 learners of English understand the pronunciation problems
 
 It has three components to it:
-1. <u>Frontend (React code)</u>
+1. <u> Frontend (React code) </u>
 - Response & Intuitive user interface which gamifies the process of learning new words and sentences
 - Has a "virtual assistant" (built using Azure TTS) which can show the lip movement animation for a given sentence thereby enabling users to easily understand the pronunciation
 
-2. Backend (Fast api)
+2. <u> Backend (Fast api) </u>
 - Exposes api's needed for user login and progress state
 - Connects to a backend DB which contains user and word-phoneme information needed for constructing sentences
 - ML Inference API which accepts audio from UI as input and returns the predicted ARPABET phoneme sequences and provides a score
 
 
-3. ML Model (Wave2Vec2 model trained on L2 Arctic using Speechbrain dataset)
+3. <u> ML Model (Wave2Vec2 model trained on L2 Arctic using Speechbrain dataset) </u>
 - Model trained on L2 Arctic dataset for a few specific accents ( refer to ./src/ml/util/prepare_data.ipynb for more details) on Google Colab
 - The checkpoints are present in <a href="https://drive.google.com/drive/folders/1-KvGwl8OBnUelgKWP5ex3BWNP54ruJu8?usp=sharing">this drive link</a>. Download the entire "results" folder and place it in the root level (/src/results)
 - The checkpoints need to placed there in order for the server to boot up
