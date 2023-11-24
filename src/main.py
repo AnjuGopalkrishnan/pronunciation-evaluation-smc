@@ -181,8 +181,8 @@ def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None),
         if row is None:
             pass
         else:
-            if(any(not c.isalnum() for c in row.word)):
-                sugg_words.append(row.word)
+            #if(any(not c.isalnum() for c in row.word)):
+            sugg_words.append(row.word)
 
         if len(sugg_words) > 10:
             break
