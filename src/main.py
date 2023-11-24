@@ -55,7 +55,12 @@ def get_favorites(username: str, db: Session = Depends(infra.db.get_db)):
 # get phonemes for any sentence
 @app.get("/phonemes/{text}")
 def get_phonemes(text: str):
+    # Remove special characters and punctuation from text
+    text = re.sub(r'[^\w\s]', '', text)
+    
     words = text.split()
+    print("Text: " + text)
+    print("Words: " + str(words))
     WordToPhn=[]
     for word in words:
         pronunciation_list = pronouncing.phones_for_word(word)[0] # choose the first version of the phoneme
