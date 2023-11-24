@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime, Foreign
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('POSTGRES_DB_STRING_TO_BE_REPLACED', echo=True)
+engine = create_engine('postgresql://speechparrot_user:gredX4buAaqNMb76PtLs59oGhMMwZDky@dpg-clessbd3qkas73b08k1g-a.singapore-postgres.render.com/speechparrot', echo=True)
 metadata = MetaData()
 connection = engine.connect()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -44,6 +44,12 @@ user_progress = Table(
     Column('score', String)
 )
 
+phoneme_dictionary = Table(
+    'phoneme_dictionary', metadata,
+    Column('word', String, primary_key=True),
+    Column('phoneme', String, primary_key=True)
+)
+
 
 class User(Base):
     __table__ = users
@@ -53,6 +59,9 @@ class Word(Base):
 
 class Userprogress(Base):
     __table__ = user_progress
+
+class Phonemedictionary(Base):
+    __table__ = phoneme_dictionary
 
 
 def GetDBConnection():

@@ -29,3 +29,5 @@ python-multipart
 pronouncing
 pydub
 librosa
+speechbrain==0.5.15
+transformers==4.34.1

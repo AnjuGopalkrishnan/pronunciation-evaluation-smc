@@ -49,9 +49,8 @@ cd src
 pip install -r .\requirements.txt
 ```
 
-2. Use /src/db_schema.sql and create a postgres db in the cloud
-3. Use the DB connection string and replace the string 'POSTGRES_DB_STRING_TO_BE_REPLACED' found inside /src/infra/db
-4. cd into the src directory run this command:
+2. Use the DB connection string and replace the string 'POSTGRES_DB_STRING_TO_BE_REPLACED' found inside /src/infra/db
+3. cd into the src directory run this command:
 
 ```
 python -m uvicorn main:app --reload
