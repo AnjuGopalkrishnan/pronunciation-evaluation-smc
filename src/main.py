@@ -199,7 +199,7 @@ def predict_pronunciation(audio: UploadFile = File(...), text: str = Form(None),
         "predicted_phonemes": predicted_phonemes,
         "score": score,
         "stats": stats,
-        "suggested_words": sugg_words
+        # "suggested_words": sugg_words
     }
 
 # This is test code to see if wav2vec2 actually works
