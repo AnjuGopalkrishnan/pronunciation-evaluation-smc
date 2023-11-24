@@ -143,9 +143,9 @@ class ASR(sb.Brain):
 
         # Initialize error categories
         errors = {
-            "deletions": {"canonical": [], "predicted": []},
-            "insertions": {"canonical": [], "predicted": []},
-            "substitutions": {"canonical": [], "predicted": []},
+            "deletions": {"canonical": {}, "predicted": {}},
+            "insertions": {"canonical": {}, "predicted": {}},
+            "substitutions": {"canonical": {}, "predicted": {}},
             "canonical": canonical,
             "predicted": predicted
         }
@@ -153,14 +153,20 @@ class ASR(sb.Brain):
         for i, item in enumerate(zip(canonical, operator, predicted)):
             canonical_phn, op, predicted_phn = item
             if op == "I":
-                errors["insertions"]["canonical"].append((i, canonical_phn))
-                errors["insertions"]["predicted"].append((i, predicted_phn))
+                # errors["insertions"]["canonical"].append((i, canonical_phn))
+                # errors["insertions"]["predicted"].append((i, predicted_phn))
+                errors["insertions"]["canonical"][i] = canonical_phn
+                errors["insertions"]["predicted"][i] = predicted_phn
             elif op == "S":
-                errors["substitutions"]["canonical"].append((i, canonical_phn))
-                errors["substitutions"]["predicted"].append((i, predicted_phn))
+                # errors["substitutions"]["canonical"].append((i, canonical_phn))
+                # errors["substitutions"]["predicted"].append((i, predicted_phn))
+                errors["substitutions"]["canonical"][i] = canonical_phn
+                errors["substitutions"]["predicted"][i] = predicted_phn
             elif op == "D":
-                errors["deletions"]["canonical"].append((i, canonical_phn))
-                errors["deletions"]["predicted"].append((i, predicted_phn))
+                # errors["deletions"]["canonical"].append((i, canonical_phn))
+                # errors["deletions"]["predicted"].append((i, predicted_phn))
+                errors["deletions"]["canonical"][i] = canonical_phn
+                errors["deletions"]["predicted"][i] = predicted_phn
 
         return errors
 
