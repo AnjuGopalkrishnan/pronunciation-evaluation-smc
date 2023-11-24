@@ -205,7 +205,9 @@ def get_wav2vec2_asr_sb_object(hparams_file):
 
 # Uncomment for testing locally
 if __name__ == '__main__':
-    wave2vec2_asr_brain = get_wav2vec2_asr_sb_object('./ml/config/wave2vec2/hparams/inference.yaml')
+    wave2vec2_asr_brain = get_wav2vec2_asr_sb_object('./ml/config/wave2vec2/hparams/inference_wo_annealing.yaml')
+    #testing without annealing model with older versions
+    # wave2vec2_asr_brain = get_wav2vec2_asr_sb_object('./ml/config/wave2vec2/hparams/train_wo_annealing.yaml')
     test_audio_path = "./assets/arctic_a0100.wav"
     canonical_phonemes = "sil y uw m ah s t s l iy p sil hh iy er jh d sil"  # actual sentence is 'You must sleep he urged'
     predicted_phonemes, score, stats = wave2vec2_asr_brain.evaluate_test_audio(test_audio_path, canonical_phonemes)
