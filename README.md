@@ -2,7 +2,7 @@
 
 ### About
 
-This repo contains the code for the Sound and music computing final project.
+This repo contains the code for the Sound and music computing (CS5647) final project.
 
 This project is essentially a Mispronunciation detection system which can help L2 learners of English understand the pronunciation problems
 
